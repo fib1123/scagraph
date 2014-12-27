@@ -1,0 +1,14 @@
+  def pointsFromFunc(func: (Double) => Double): List[Point] = {
+
+    val xMin = canvasProperties.getXLowerBound
+    val xMax = canvasProperties.getXUpperBound
+    val delta = canvasProperties.getDelta
+
+    def genPoints(func: (Double) => Double, currX: Double): List[Point] = {
+      if (currX < xMax) new Point(currX, func(currX)) :: genPoints(func, currX + delta)
+      else List()
+    }
+
+    val points = genPoints(func, xMin)
+    points
+  }
