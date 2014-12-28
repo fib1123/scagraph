@@ -5,4 +5,7 @@ package model.canvas
  */
 trait DrawingMode {
 
+  val period: Int
+  val delta: Double
+
 }
