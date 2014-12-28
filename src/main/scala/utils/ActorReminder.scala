@@ -6,7 +6,11 @@ import akka.actor.Actor.Receive
 /**
  * Created by fazzou on 28.12.14.
  */
-class ActorReminder(val who: ActorRef, val period: Int) extends Actor {
+object ActorReminder {
+
+}
+
+class ActorReminder(val period: Int) extends Actor {
 
   def receive = {
     case "start" => remind()
@@ -16,7 +20,7 @@ class ActorReminder(val who: ActorRef, val period: Int) extends Actor {
   def remind() = {
     while (true) {
       Thread.sleep(period)
-      who ! "PeriodEnd"
+      context.parent ! "PeriodEnd"
     }
   }
 }
