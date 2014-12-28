@@ -16,5 +16,6 @@ class Graph (val func: Double => Double, val graphProperties: GraphProperties) {
 object Graph {
 
   def apply(func: Double => Double) =
-    new Graph(func, new GraphProperties()) // creating graph with default properties
+    new Graph(func, new GraphProperties) // creating graph with default properties
+
 }
