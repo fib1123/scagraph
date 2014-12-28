@@ -5,22 +5,28 @@ import model.{GraphProperties, Point, Graph}
 import akka.actor.{Actor, Props}
 import utils.ActorReminder
 
+import scala.collection.immutable.HashMap
+
 /**
  * Created by Stanislaw Robak on 2014-12-26.
  */
-class Canvas (graphs: List[Graph],
+class Canvas (var graphs: List[Graph] = List(),
               canvasProperties: CanvasProperties,
-               private var newPoints: Map[Point, Int],
-               var points: Map[Double, Map[Double, GraphProperties]])
+               private var newPoints: Map[Point, Int] = new HashMap[Point, Int],
+               var points: Map[Double, Map[Double, GraphProperties]] =
+               new HashMap[Double, Map[Double, GraphProperties]])
   extends Actor {
 
   def start() = {
-    val cr = new ActorReminder(self, canvasProperties.drawingMode.period)
-    cr.self ! "LetsGo"
+    val reminderProps = Props(classOf[ActorReminder], this.self, canvasProperties.drawingMode.period)
+    val cr = context.actorOf(reminderProps)
+    cr ! "start"
   }
 
   def receive = {
     case (id: Int, point: Point) => draw(id, point)
+    case graph: Graph => graphs = graphs :+ graph
+      sender() ! graphs.indexOf(graph)
     case "PeriodEnd" => periodLoop()
   }
 
