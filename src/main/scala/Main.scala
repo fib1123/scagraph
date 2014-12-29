@@ -9,7 +9,7 @@ import swing._
 
 import scala.collection.immutable.{Range, HashMap}
 
-object Main extends App with Actor {
+object Main extends App {
 //  println("Welcome to Scagraph!")
 //  val cc = new CanvasController(new Canvas(new HashMap[Point, GraphProperties]))
 //  val aw = new AppWindow(cc)
@@ -23,9 +23,6 @@ object Main extends App with Actor {
 //  }
 //  cc.update(testMap)
 
-  def receive = {
-    case _ =>
-  }
 
   val system = ActorSystem()
 
