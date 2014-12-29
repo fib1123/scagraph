@@ -5,4 +5,7 @@ package model
  */
 class Point (val x: Double, val y: Double) {
   def afterDelta(delta: Double, func: (Double) => Double) = new Point(x + delta, func(x+delta))
+  override def toString: String = {
+    "(" + x.toString + ", " + y.toString + ")"
+  }
 }

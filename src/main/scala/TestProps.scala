@@ -19,6 +19,6 @@ object TestProps {
 
     val canv = Canvas.props(canvP)
 
-    (Props(new TestActor(period = 10)), canv)
+    (Props(new TestActor(period = 1)), canv)
   }
 }

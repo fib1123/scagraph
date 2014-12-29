@@ -29,6 +29,7 @@ object Main extends App {
   val ta = system.actorOf(TestProps.getProps._1)
   val tc = system.actorOf(TestProps.getProps._2)
 
+  tc ! "init"
   ta ! tc
   ta ! "register"
 }

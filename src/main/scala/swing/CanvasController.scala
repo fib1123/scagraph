@@ -10,7 +10,7 @@ import scala.collection.immutable.HashMap
  */
 class CanvasController(val canvas: Canvas) extends GUICanvas {
 
-  override def update(points: Map[Double, Map[Double, GraphProperties]]): Unit = {
+  def update(points: Map[Double, Map[Double, GraphProperties]]) = {
     var hm = new HashMap[Point, GraphProperties]
     for (x <- points.toMap.keySet) {
       for (y <- points(x).keySet) {

@@ -12,12 +12,12 @@ class Graph (val func: Double => Double, val graphProperties: GraphProperties) e
   val log = Logging(context.system, this)
 
   def genPointLoop(canvasRef: ActorRef, gPeriod: Int, gDelta: Double, currentPoint: Point): Unit = {
-    val newPoint = currentPoint.afterDelta(gDelta, func)
-    canvasRef ! newPoint
-
-    Thread.sleep(gPeriod)
-
-    genPointLoop(canvasRef, gPeriod, gDelta, newPoint)
+//    val newPoint = currentPoint.afterDelta(gDelta, func)
+//    canvasRef ! newPoint
+//
+//    Thread.sleep(gPeriod)
+//
+//    genPointLoop(canvasRef, gPeriod, gDelta, newPoint)
   }
 
   def receive: Receive = {
