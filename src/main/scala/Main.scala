@@ -27,8 +27,12 @@ object Main extends App with Actor {
     case _ =>
   }
 
-  val ta = context.actorOf(TestProps.getProps)
+  val system = ActorSystem()
 
+  val ta = system.actorOf(TestProps.getProps._1)
+  val tc = system.actorOf(TestProps.getProps._2)
+
+  ta ! tc
   ta ! "register"
 }
 

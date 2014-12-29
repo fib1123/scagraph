@@ -10,14 +10,15 @@ import scala.collection.immutable.HashMap
  */
 object TestProps {
 
-  def getProps: Props = {
+  def getProps: (Props, Props) = {
     val cc = new CanvasController(new swing.Canvas(new HashMap[Point, GraphProperties]))
     val aw = new AppWindow(cc)
     aw.startup(Array())
 
     val canvP = new CanvasProperties(GUICanvas = cc)
-    val canv = new Canvas(canvasProperties = canvP)
 
-    Props(classOf[TestActor], canv.self, 10)
+    val canv = Canvas.props(canvP)
+
+    (Props(new TestActor(period = 10)), canv)
   }
 }

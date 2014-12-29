@@ -10,6 +10,13 @@ import scala.collection.immutable.HashMap
 /**
  * Created by Stanislaw Robak on 2014-12-26.
  */
+
+object Canvas {
+  def props(canvP: CanvasProperties) = {
+    Props(new Canvas(canvasProperties = canvP))
+  }
+}
+
 class Canvas (var graphs: List[Graph] = List(),
               canvasProperties: CanvasProperties,
                private var newPoints: Map[Point, Int] = new HashMap[Point, Int],
