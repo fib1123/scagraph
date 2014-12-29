@@ -2,6 +2,8 @@ import akka.actor.{Actor, ActorRef}
 import akka.event.Logging
 import model.{Point, GraphProperties, Graph}
 
+import scala.annotation.tailrec
+
 /**
  * Created by fazzou on 28.12.14.
  */
@@ -18,7 +20,7 @@ class TestActor(var replyTo: ActorRef = null, val period: Int) extends Actor {
       log.info("Registration message sent")
   }
 
-  def loop(x: Double, id: Int): Unit = {
+  @tailrec final def loop(x: Double, id: Int): Unit = {
     Thread.sleep(period)
     replyTo !(id, new Point(x, x))
     loop(x + 0.01, id)

@@ -37,7 +37,6 @@ class Canvas (var graphs: List[GraphProperties] = List(),
   def receive = {
     case "init" => start()
     case (id: Int, point: Point) => draw(id, point)
-      log.info("Drawing point " + point)
     case graphProps: GraphProperties => graphs = graphs :+ graphProps
       sender() ! graphs.indexOf(graphProps)
       log.info("New graph: " + graphProps + " sender: " + sender())

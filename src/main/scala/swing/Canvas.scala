@@ -19,7 +19,7 @@ class Canvas(var points : Map[Point, GraphProperties] = new HashMap[Point, Graph
         val col = points(point).color
         val width = points(point).width.toInt
         g.setColor(col)
-        g.drawOval(point.x.toInt, point.y.toInt, width, width)
+        g.fillOval(point.x.toInt, point.y.toInt, width, width)
     }
   }
 
