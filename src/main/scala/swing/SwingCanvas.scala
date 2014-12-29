@@ -10,7 +10,7 @@ import scala.swing.{Graphics2D, Panel}
 /**
  * Created by fazzou on 27.12.14.
  */
-class Canvas(var points : Map[Point, GraphProperties] = new HashMap[Point, GraphProperties]) extends Panel {
+class SwingCanvas(var points : Map[Point, GraphProperties] = new HashMap[Point, GraphProperties]) extends Panel {
 
   override protected def paintComponent(g: Graphics2D): Unit = {
     g.clearRect(0, 0, size.width, size.height)

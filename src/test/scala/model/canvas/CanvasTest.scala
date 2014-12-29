@@ -3,7 +3,7 @@ package model.canvas
 import akka.actor.{ActorRef, Actor}
 import model.{GraphProperties, Point}
 import org.scalatest.FunSuite
-import swing.{AppWindow, Canvas, CanvasController}
+import swing.{AppWindow, SwingCanvas, CanvasController}
 
 import scala.collection.immutable.HashMap
 
