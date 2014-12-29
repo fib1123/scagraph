@@ -22,7 +22,7 @@ class TestActor(var replyTo: ActorRef = null, val period: Int) extends Actor {
 
   @tailrec final def loop(x: Double, id: Int): Unit = {
     Thread.sleep(period)
-    replyTo !(id, new Point(x, x))
+    replyTo ! (id, new Point(x, x))
     loop(x + 0.01, id)
   }
 

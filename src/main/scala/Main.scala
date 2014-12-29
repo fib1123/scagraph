@@ -3,6 +3,7 @@
  */
 
 import akka.actor.{ActorSystem, Props, Actor, ActorRef}
+import controllers.Controller
 import model.canvas.{Canvas, CanvasProperties}
 import model.{Point, GraphProperties}
 import swing._
@@ -23,14 +24,19 @@ object Main extends App {
 //  }
 //  cc.update(testMap)
 
+//
+//  val system = ActorSystem()
+//
+//  val ta = system.actorOf(TestProps.getProps._1)
+//  val tc = system.actorOf(TestProps.getProps._2)
+//
+//  tc ! "init"
+//  ta ! tc
+//  ta ! "register"
 
-  val system = ActorSystem()
+  val controller = new Controller
+  val canvasRef = controller.newCanvas(null)
 
-  val ta = system.actorOf(TestProps.getProps._1)
-  val tc = system.actorOf(TestProps.getProps._2)
-
-  tc ! "init"
-  ta ! tc
-  ta ! "register"
+  controller.newGraph(canvasRef, x => 5*Math.sqrt(x))
 }
 

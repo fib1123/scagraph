@@ -12,18 +12,29 @@ import scala.collection.immutable.HashMap
  * Created by Stanislaw Robak on 2014-12-26.
  */
 
-object Canvas {
-  def props(canvP: CanvasProperties) = {
-    Props(new Canvas(canvasProperties = canvP))
-  }
-}
-
 class Canvas (var graphs: List[GraphProperties] = List(),
               canvasProperties: CanvasProperties,
                private var newPoints: Map[Point, Int] = new HashMap[Point, Int],
                var points: Map[Double, Map[Double, GraphProperties]] =
                new HashMap[Double, Map[Double, GraphProperties]])
   extends Actor {
+
+  def receive = {
+    case "init" => start()
+    case (id: Int, point: Point) => draw(id, point)
+    case (func: (Double => Double), graphProperties: GraphProperties) =>
+      graphs = graphs :+ graphProperties
+
+      val id = graphs.indexOf(graphProperties)
+
+      val graphProps = Graph.props(id, func)
+      val graphRef = context.actorOf(graphProps)
+      graphRef ! (canvasProperties.drawingMode.period, 0.1, new Point(0, 30))
+//      sender() ! graphRef
+      log.info("New graph: " + graphProps + " sender: " + sender())
+
+    case "PeriodEnd" => periodLoop()
+  }
 
   val log = Logging(context.system, this)
 
@@ -32,15 +43,6 @@ class Canvas (var graphs: List[GraphProperties] = List(),
     val cr = context.actorOf(reminderProps)
     cr ! "start"
     log.info("Reminder started")
-  }
-
-  def receive = {
-    case "init" => start()
-    case (id: Int, point: Point) => draw(id, point)
-    case graphProps: GraphProperties => graphs = graphs :+ graphProps
-      sender() ! graphs.indexOf(graphProps)
-      log.info("New graph: " + graphProps + " sender: " + sender())
-    case "PeriodEnd" => periodLoop()
   }
 
   def draw(id: Int, point: Point) = {
@@ -84,3 +86,8 @@ class Canvas (var graphs: List[GraphProperties] = List(),
   }
 }
 
+object Canvas {
+  def props(canvP: CanvasProperties) = {
+    Props(new Canvas(canvasProperties = canvP))
+  }
+}

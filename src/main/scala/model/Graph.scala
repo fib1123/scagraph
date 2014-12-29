@@ -7,17 +7,17 @@ import utils.ActorReminder
 /**
  * Created by Stanislaw Robak on 2014-12-26.
  */
-class Graph (val func: Double => Double, val graphProperties: GraphProperties) extends Actor {
+class Graph (val id: Int, val func: Double => Double) extends Actor {
 
   val log = Logging(context.system, this)
 
   def genPointLoop(canvasRef: ActorRef, gPeriod: Int, gDelta: Double, currentPoint: Point): Unit = {
-//    val newPoint = currentPoint.afterDelta(gDelta, func)
-//    canvasRef ! newPoint
-//
-//    Thread.sleep(gPeriod)
-//
-//    genPointLoop(canvasRef, gPeriod, gDelta, newPoint)
+    val newPoint = currentPoint.afterDelta(gDelta, func)
+    canvasRef ! (id, newPoint)
+    println(newPoint)
+    Thread.sleep(gPeriod)
+
+    genPointLoop(canvasRef, gPeriod, gDelta, newPoint)
   }
 
   def receive: Receive = {
@@ -37,6 +37,5 @@ class Graph (val func: Double => Double, val graphProperties: GraphProperties) e
 
 object Graph {
 
-  // creating graph with default properties
-  def props(func: Double => Double): Props = Props(new Graph(func, new GraphProperties))
+  def props(id: Int, func: Double => Double): Props = Props(new Graph(id, func))
 }

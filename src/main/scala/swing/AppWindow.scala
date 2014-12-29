@@ -1,5 +1,7 @@
 package swing
 
+import java.awt.Color
+
 import _root_.model.{Point, GraphProperties}
 
 import scala.collection.immutable.HashMap
