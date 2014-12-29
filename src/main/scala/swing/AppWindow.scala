@@ -19,9 +19,9 @@ class AppWindow(cc : CanvasController) extends SimpleSwingApplication {
         text = "Welcome to Scagraph!"
         font = new Font("Ariel", java.awt.Font.ITALIC, 10)
       }
-      val canvas = cc.canvas
+      val swingCanvas = cc.canvas
 
-      canvas.preferredSize = new Dimension(200, 200)
+      swingCanvas.preferredSize = new Dimension(200, 200)
 
       val gridPanel = new GridPanel(1, 2) {
         contents += label
@@ -31,7 +31,7 @@ class AppWindow(cc : CanvasController) extends SimpleSwingApplication {
       // Components may include other Panels
       contents = new BorderPanel {
         layout(gridPanel) = North
-        layout(canvas) = Center
+        layout(swingCanvas) = Center
       }
       size = new Dimension(200, 200)
       menuBar = new MenuBar {
