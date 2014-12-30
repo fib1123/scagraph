@@ -34,9 +34,13 @@ object Main extends App {
 //  ta ! tc
 //  ta ! "register"
 
-  val controller = new Controller
+  val cc = new CanvasController(new SwingCanvas(new HashMap[Point, GraphProperties]))
+  val aw = new AppWindow(cc)
+  aw.startup(Array())
+
+  val controller = new Controller(cc)
   val canvasRef = controller.newCanvas(null)
 
-  controller.newGraph(canvasRef, x => 5*Math.sqrt(x))
+  controller.newGraph(canvasRef, x => Math.sin(x))
 }
 
