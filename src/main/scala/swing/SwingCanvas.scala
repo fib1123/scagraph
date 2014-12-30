@@ -15,11 +15,12 @@ class SwingCanvas(var points : Map[Point, GraphProperties] = new HashMap[Point, 
   override protected def paintComponent(g: Graphics2D): Unit = {
     g.clearRect(0, 0, size.width, size.height)
     val iter = points.keysIterator
-    for (point <- points.keySet) {
+    for (point <- points.keys) {
         val col = points(point).color
         val width = points(point).width.toInt
         g.setColor(col)
-        g.fillOval(point.x.toInt, point.y.toInt, width, width)
+        println(point.x.toInt, point.y.toInt)
+        g.fillOval(20+point.x.toInt, 70-point.y.toInt, width, width)
     }
   }
 
