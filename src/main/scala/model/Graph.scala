@@ -14,7 +14,6 @@ class Graph (val id: Int, val func: Double => Double) extends Actor {
   def genPointLoop(canvasRef: ActorRef, gPeriod: Int, gDelta: Double, currentPoint: Point): Unit = {
     val newPoint = currentPoint.afterDelta(gDelta, func)
     canvasRef ! (id, newPoint)
-    println(newPoint)
     Thread.sleep(gPeriod)
 
     genPointLoop(canvasRef, gPeriod, gDelta, newPoint)
