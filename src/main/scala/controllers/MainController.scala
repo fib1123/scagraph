@@ -11,7 +11,7 @@ import scala.collection.immutable.HashMap
 /**
  * Created by Stanislaw Robak on 2014-12-27.
  */
-class Controller (guiCanvas: GUICanvas){
+class MainController (guiCanvas: GUICanvas){
 
   val system = ActorSystem()
 
@@ -24,9 +24,10 @@ class Controller (guiCanvas: GUICanvas){
     canvasActor
   }
 
-  def newGraph(canvasRef: ActorRef, func: Double => Double) = {
-    val graphProperties = new GraphProperties
+  def newGraph(canvasRef: ActorRef, func: Double => Double,
+               graphProperties: GraphProperties = new GraphProperties()) = {
 
-    canvasRef ! (func, graphProperties)
+    val graphProps = Graph.props(func)
+    canvasRef ! (graphProps, graphProperties)
   }
 }
