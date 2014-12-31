@@ -3,7 +3,7 @@
  */
 
 import akka.actor.{ActorSystem, Props, Actor, ActorRef}
-import controllers.Controller
+import controllers.MainController
 import model.canvas.{Canvas, CanvasProperties}
 import model.{Point, GraphProperties}
 import swing._
@@ -38,7 +38,7 @@ object Main extends App {
   val aw = new AppWindow(cc)
   aw.startup(Array())
 
-  val controller = new Controller(cc)
+  val controller = new MainController(cc)
   val canvasRef = controller.newCanvas(null)
 
   controller.newGraph(canvasRef, x => Math.sin(x))

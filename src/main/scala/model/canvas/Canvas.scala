@@ -12,31 +12,26 @@ import scala.collection.immutable.HashMap
  * Created by Stanislaw Robak on 2014-12-26.
  */
 
-class Canvas (var graphs: List[GraphProperties] = List(),
-              canvasProperties: CanvasProperties,
-               private var newPoints: Map[Point, Int] = new HashMap[Point, Int],
-               var points: Map[Double, Map[Double, GraphProperties]] =
-               new HashMap[Double, Map[Double, GraphProperties]])
-  extends Actor {
+class Canvas (canvasProperties: CanvasProperties) extends Actor {
+
+  val log = Logging(context.system, this)
+
+  var graphs: Map[ActorRef, GraphProperties] = new HashMap[ActorRef, GraphProperties]
+  private var newPoints: Map[Point, ActorRef] = new HashMap[Point, ActorRef]
+  var points: Map[Double, Map[Double, GraphProperties]] = new HashMap[Double, Map[Double, GraphProperties]]
 
   def receive = {
     case "init" => start()
-    case (id: Int, point: Point) => draw(id, point)
-    case (func: (Double => Double), graphProperties: GraphProperties) =>
-      graphs = graphs :+ graphProperties
 
-      val id = graphs.indexOf(graphProperties)
+    case (point: Point) => draw(sender(), point)
 
-      val graphProps = Graph.props(id, func)
-      val graphRef = context.actorOf(graphProps)
-      graphRef ! (canvasProperties.drawingMode.period, 0.1, new Point(0, 30))
-//      sender() ! graphRef
-      log.info("New graph: " + graphProps + " sender: " + sender())
+    case (props: Props, graphProperties: GraphProperties, initialPoint: Point) =>
+      val graphRef = context.actorOf(props)
+      graphs = graphs + (graphRef -> graphProperties)
+      graphRef ! (canvasProperties.drawingMode.period, 0.1, initialPoint)
 
     case "PeriodEnd" => periodLoop()
   }
-
-  val log = Logging(context.system, this)
 
   def start() = {
     val reminderProps = Props(new ActorReminder(canvasProperties.drawingMode.period))
@@ -45,8 +40,8 @@ class Canvas (var graphs: List[GraphProperties] = List(),
     log.info("Reminder started")
   }
 
-  def draw(id: Int, point: Point) = {
-    newPoints = newPoints + (point -> id)
+  def draw(graph: ActorRef, point: Point) = {
+    newPoints = newPoints + (point -> graph)
   }
 
   def periodLoop(): Unit = {
@@ -54,7 +49,7 @@ class Canvas (var graphs: List[GraphProperties] = List(),
     canvasProperties.GUICanvas.update(points)
   }
 
-  private def insertPoints(newPoints: Map[Point, Int],
+  private def insertPoints(newPoints: Map[Point, ActorRef],
                            currentPoints: Map[Double, Map[Double, GraphProperties]]):
   Map[Double, Map[Double, GraphProperties]] = {
 
@@ -76,7 +71,7 @@ class Canvas (var graphs: List[GraphProperties] = List(),
     }
   }
 
-  private def currentPointsContainsXFromFirstNew(newPoints: Map[Point, Int],
+  private def currentPointsContainsXFromFirstNew(newPoints: Map[Point, ActorRef],
                                                  currentPoints: Map[Double, Map[Double, GraphProperties]])
   : Boolean = {
     newPoints.size match {
