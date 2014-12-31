@@ -18,7 +18,8 @@ class Canvas (canvasProperties: CanvasProperties) extends Actor {
 
   var graphs: Map[ActorRef, GraphProperties] = new HashMap[ActorRef, GraphProperties]
   private var newPoints: Map[Point, ActorRef] = new HashMap[Point, ActorRef]
-  var points: Map[Double, Map[Double, GraphProperties]] = new HashMap[Double, Map[Double, GraphProperties]]
+  var points: Map[GraphProperties, List[Point]] = new HashMap[GraphProperties, List[Point]]
+  //var pointsXMap: Map[Double, List[(Int, Int)]]
 
   def receive = {
     case "init" => start()
@@ -49,34 +50,22 @@ class Canvas (canvasProperties: CanvasProperties) extends Actor {
     canvasProperties.GUICanvas.update(points)
   }
 
-  private def insertPoints(newPoints: Map[Point, ActorRef],
-                           currentPoints: Map[Double, Map[Double, GraphProperties]]):
-  Map[Double, Map[Double, GraphProperties]] = {
-
-    (newPoints.size, currentPointsContainsXFromFirstNew(newPoints, currentPoints)) match {
-      case (0, _) =>
-        currentPoints
-      case (_, true) =>
-        val point = newPoints.keySet.head
-        val newCurrent = currentPoints +
-          (point.x -> (currentPoints(point.x) +
-            (point.y -> graphs(newPoints(point)))))
-        insertPoints(newPoints - point, newCurrent)
-      case (_, false) =>
-        val point = newPoints.keySet.head
-        val newCurrent = currentPoints +
-          (point.x -> (new HashMap[Double, GraphProperties] +
-            (point.y -> graphs(newPoints(point)))))
-        insertPoints(newPoints - point, newCurrent)
-    }
-  }
-
-  private def currentPointsContainsXFromFirstNew(newPoints: Map[Point, ActorRef],
-                                                 currentPoints: Map[Double, Map[Double, GraphProperties]])
-  : Boolean = {
+  def insertPoints(newPoints: Map[Point, ActorRef],
+                    currentPoints: Map[GraphProperties, List[Point]])
+  : Map[GraphProperties, List[Point]] = {
+    var newCurrentPoints = currentPoints
     newPoints.size match {
-      case 0 => false
-      case _ => currentPoints.contains(newPoints.keySet.head.x)
+      case 0 => currentPoints
+      case _ =>
+        val newPoint = newPoints.keySet.head
+        val newPointProps = graphs(newPoints(newPoint))
+        currentPoints.contains (newPointProps) match {
+          case false => newCurrentPoints = currentPoints + (newPointProps -> List[Point] () )
+          case true =>
+        }
+        newCurrentPoints = newCurrentPoints +
+        (newPointProps -> (newCurrentPoints (newPointProps) :+ newPoint) )
+        insertPoints (newPoints - newPoint, newCurrentPoints)
     }
   }
 }

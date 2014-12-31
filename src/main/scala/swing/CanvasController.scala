@@ -10,13 +10,7 @@ import scala.collection.immutable.HashMap
  */
 class CanvasController(val canvas: SwingCanvas) extends GUICanvas {
 
-  def update(points: Map[Double, Map[Double, GraphProperties]]) = {
-    var hm = new HashMap[Point, GraphProperties]
-    for (x <- points.toMap.keySet) {
-      for (y <- points(x).keySet) {
-        hm = hm + (new Point(x, y) -> points(x)(y))
-      }
-    }
-    canvas.update(hm)
+  def update(points: Map[GraphProperties, List[Point]]) = {
+    canvas.update(points)
   }
 }

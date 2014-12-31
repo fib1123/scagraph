@@ -11,7 +11,7 @@ import scala.collection.immutable.HashMap
 object TestProps {
 
   def getProps: (Props, Props) = {
-    val cc = new CanvasController(new swing.SwingCanvas(new HashMap[Point, GraphProperties]))
+    val cc = new CanvasController(new swing.SwingCanvas)
     val aw = new AppWindow(cc)
     aw.startup(Array())
 

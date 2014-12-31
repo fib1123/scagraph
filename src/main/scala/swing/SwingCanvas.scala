@@ -12,14 +12,19 @@ import scala.swing.{Graphics2D, Panel}
 /**
  * Created by fazzou on 27.12.14.
  */
-class SwingCanvas(private var points : Map[Point, GraphProperties] =
-                  new HashMap[Point, GraphProperties],
-                   private var currentProperties: SwingCanvasProperties =
-                   new SwingCanvasProperties,
-                   var shouldRefreshView: Boolean =
-                   true,
-                   private var newPoints : Map[Point, GraphProperties] =
-                   new HashMap[Point, GraphProperties]) extends Panel {
+class SwingCanvas() extends Panel {
+
+  private var points : Map[GraphProperties, List[Point]] =
+    new HashMap[GraphProperties, List[Point]]
+
+  private var currentProperties: SwingCanvasProperties =
+    new SwingCanvasProperties
+
+  private var newPoints : Map[GraphProperties, List[Point]] =
+    new HashMap[GraphProperties, List[Point]]
+
+  var shouldRefreshView: Boolean =
+    true
 
   override protected def paintComponent(g: Graphics2D): Unit = {
     shouldRefreshView match {
@@ -30,7 +35,7 @@ class SwingCanvas(private var points : Map[Point, GraphProperties] =
     }
   }
 
-  def update(points: Map[Point, GraphProperties],
+  def update(points: Map[GraphProperties, List[Point]],
              guiCanvasProperties: SwingCanvasProperties = this.currentProperties) = {
     shouldRefreshView = this.currentProperties != guiCanvasProperties
     this.newPoints = points
@@ -62,23 +67,37 @@ class SwingCanvas(private var points : Map[Point, GraphProperties] =
   }
 
   def drawNewPoints(g: Graphics2D) = {
-    val toDraw = newPoints -- points.keySet
+    val toDraw = subtract(points, newPoints)
     points = newPoints
     drawPointsFrom(toDraw, g)
   }
 
-  def drawPointsFrom(p: Map[Point, GraphProperties], g: Graphics2D) = {
-    var transMap = new HashMap[scala.swing.Point, GraphProperties]
-    for(point <- points.keys) {
-      transMap = transMap + (translate(point) -> points(point))
+  def drawPointsFrom(p: Map[GraphProperties, List[Point]], g: Graphics2D) = {
+    for(gp <- p.keys) {
+      val zipped = p(gp).zip(p(gp).tail)
+      for ((first, second) <- zipped) {
+        val transFirst = translate(first)
+        val transSecond = translate(second)
+        val col = gp.color
+        val width = gp.width.toInt
+        g.setColor(col)
+        g.drawLine(transFirst.x, transFirst.y, transSecond.x, transSecond.y)
+      }
     }
-    for (p <- transMap.keySet) {
-      val gp = transMap(p)
-      val col = gp.color
-      val width = gp.width.toInt
-      g.setColor(col)
-      g.fillOval(p.x - width/2, p.y - width/2, width, width)
+  }
+
+  def subtract(points1: Map[GraphProperties, List[Point]],
+               points2: Map[GraphProperties, List[Point]]):
+  Map[GraphProperties, List[Point]] = {
+    var result = points1
+    for (gp <- points1.keys) {
+      points2.contains(gp) match {
+        case true => result = result + (gp -> points1(gp)
+          .filter((p: Point) => points2(gp).contains(p)))
+        case false =>
+      }
     }
+    result
   }
 
   def translate(point: Point) : scala.swing.Point = {
