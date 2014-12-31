@@ -25,9 +25,10 @@ class MainController (guiCanvas: GUICanvas){
   }
 
   def newGraph(canvasRef: ActorRef, func: Double => Double,
-               graphProperties: GraphProperties = new GraphProperties()) = {
+               graphProperties: GraphProperties = new GraphProperties(),
+                initialPoint: Point = new Point(0,0)) = {
 
     val graphProps = Graph.props(func)
-    canvasRef ! (graphProps, graphProperties)
+    canvasRef ! (graphProps, graphProperties, initialPoint)
   }
 }

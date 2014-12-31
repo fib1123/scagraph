@@ -25,10 +25,10 @@ class Canvas (canvasProperties: CanvasProperties) extends Actor {
 
     case (point: Point) => draw(sender(), point)
 
-    case (props: Props, graphProperties: GraphProperties) =>
+    case (props: Props, graphProperties: GraphProperties, initialPoint: Point) =>
       val graphRef = context.actorOf(props)
       graphs = graphs + (graphRef -> graphProperties)
-      graphRef ! (canvasProperties.drawingMode.period, 0.1, new Point(0, 30))
+      graphRef ! (canvasProperties.drawingMode.period, 0.1, initialPoint)
 
     case "PeriodEnd" => periodLoop()
   }
