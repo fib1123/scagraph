@@ -2,6 +2,8 @@
  * Created by Stanislaw Robak on 2014-12-26.
  */
 
+import java.awt.Color
+
 import akka.actor.{ActorSystem, Props, Actor, ActorRef}
 import controllers.MainController
 import model.canvas.{Canvas, CanvasProperties}
@@ -41,6 +43,7 @@ object Main extends App {
   val controller = new MainController(cc)
   val canvasRef = controller.newCanvas(null)
 
-  controller.newGraph(canvasRef, x => 1/x)
+  controller.newGraph(canvasRef, x => Math.tan(x))
+  controller.newGraph(canvasRef, x => 1/x, new GraphProperties(color = Color.red))
 }
 

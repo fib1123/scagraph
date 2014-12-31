@@ -47,6 +47,7 @@ class Canvas (canvasProperties: CanvasProperties) extends Actor {
 
   def periodLoop(): Unit = {
     points = insertPoints(newPoints, points)
+    newPoints = new HashMap[Point, ActorRef]
     canvasProperties.GUICanvas.update(points)
   }
 
