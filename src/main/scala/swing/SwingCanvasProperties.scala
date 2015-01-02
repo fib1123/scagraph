@@ -18,6 +18,6 @@ object SwingCanvasProperties {
 }
 
 class SwingCanvasProperties(val centerPoint: Point = new Point(-150, 0),
-                            val zoom: Double = 20) {
+                            val zoom: Double = 5) {
 
 }

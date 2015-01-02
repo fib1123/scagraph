@@ -1,6 +1,6 @@
 package swing
 
-import java.awt.Color
+import java.awt.{BasicStroke, Color}
 
 import akka.actor.Props
 import model.{Point, GraphProperties}
@@ -14,13 +14,13 @@ import scala.swing.{Graphics2D, Panel}
  */
 class SwingCanvas() extends Panel {
 
-  private var points : Map[GraphProperties, List[Point]] =
+  private var points: Map[GraphProperties, List[Point]] =
     new HashMap[GraphProperties, List[Point]]
 
   private var currentProperties: SwingCanvasProperties =
     new SwingCanvasProperties
 
-  private var newPoints : Map[GraphProperties, List[Point]] =
+  private var newPoints: Map[GraphProperties, List[Point]] =
     new HashMap[GraphProperties, List[Point]]
 
   var shouldRefreshView: Boolean =
@@ -73,7 +73,7 @@ class SwingCanvas() extends Panel {
   }
 
   def drawPointsFrom(p: Map[GraphProperties, List[Point]], g: Graphics2D) = {
-    for(gp <- p.keys) {
+    for (gp <- p.keys) {
       val zipped = p(gp).zip(p(gp).tail)
       for ((first, second) <- zipped) {
         val transFirst = translate(first)
@@ -81,6 +81,9 @@ class SwingCanvas() extends Panel {
         val col = gp.color
         val width = gp.width.toInt
         g.setColor(col)
+        g.setStroke(new BasicStroke(width.toFloat,
+          BasicStroke.CAP_ROUND,
+          BasicStroke.JOIN_ROUND));
         g.drawLine(transFirst.x, transFirst.y, transSecond.x, transSecond.y)
       }
     }
@@ -100,10 +103,10 @@ class SwingCanvas() extends Panel {
     result
   }
 
-  def translate(point: Point) : scala.swing.Point = {
+  def translate(point: Point): scala.swing.Point = {
     val center = SwingCanvasProperties.getZeroCoordinates(this.currentProperties, this.size)
-    val translatedX = center.x + point.x*currentProperties.zoom
-    val translatedY = center.y - point.y*currentProperties.zoom
+    val translatedX = center.x + point.x * currentProperties.zoom
+    val translatedY = center.y - point.y * currentProperties.zoom
     new scala.swing.Point(translatedX.toInt, translatedY.toInt)
   }
 

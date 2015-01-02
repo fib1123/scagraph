@@ -43,7 +43,13 @@ object Main extends App {
   val controller = new MainController(cc)
   val canvasRef = controller.newCanvas(null)
 
-  controller.newGraph(canvasRef, x => Math.tan(x))
-  controller.newGraph(canvasRef, x => 1/x, new GraphProperties(color = Color.red))
+  controller.newGraph(canvasRef, x => Math.sin(x) - 15, new GraphProperties(color = Color.green))
+  controller.newGraph(canvasRef, x => Math.sin(x) - 10, new GraphProperties(color = Color.MAGENTA))
+  controller.newGraph(canvasRef, x => Math.sin(x) - 5, new GraphProperties(color = Color.green))
+  controller.newGraph(canvasRef, x => Math.sin(x) + 5, new GraphProperties(color = Color.MAGENTA))
+  controller.newGraph(canvasRef, x => Math.sin(x) + 10, new GraphProperties(color = Color.green))
+  controller.newGraph(canvasRef, x => Math.sin(x) + 15, new GraphProperties(color = Color.MAGENTA))
+  controller.newGraph(canvasRef, x => 20/(x-30), new GraphProperties(color = Color.black))
+
 }
 
