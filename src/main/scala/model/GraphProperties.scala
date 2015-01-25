@@ -5,4 +5,4 @@ import java.awt.Color
 /**
  * Created by Stanislaw Robak on 2014-12-27.
  */
-class GraphProperties(val color: Color = Color.BLUE, val width: Double = 2.0, val speed: Double = 1.0)
+class GraphProperties(val color: Color = Color.BLUE, val width: Double = 6.0, val speed: Double = 1.0)

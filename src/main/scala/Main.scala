@@ -2,6 +2,8 @@
  * Created by Stanislaw Robak on 2014-12-26.
  */
 
+import java.awt.Color
+
 import akka.actor.{ActorSystem, Props, Actor, ActorRef}
 import controllers.MainController
 import model.canvas.{Canvas, CanvasProperties}
@@ -34,13 +36,20 @@ object Main extends App {
 //  ta ! tc
 //  ta ! "register"
 
-  val cc = new CanvasController(new SwingCanvas(new HashMap[Point, GraphProperties]))
+  val cc = new CanvasController(new SwingCanvas)
   val aw = new AppWindow(cc)
   aw.startup(Array())
 
   val controller = new MainController(cc)
   val canvasRef = controller.newCanvas(null)
 
-  controller.newGraph(canvasRef, x => Math.sin(x))
+  controller.newGraph(canvasRef, x => Math.sin(x) - 15, new GraphProperties(color = Color.green))
+  controller.newGraph(canvasRef, x => Math.sin(x) - 10, new GraphProperties(color = Color.MAGENTA))
+  controller.newGraph(canvasRef, x => Math.sin(x) - 5, new GraphProperties(color = Color.green))
+  controller.newGraph(canvasRef, x => Math.sin(x) + 5, new GraphProperties(color = Color.MAGENTA))
+  controller.newGraph(canvasRef, x => Math.sin(x) + 10, new GraphProperties(color = Color.green))
+  controller.newGraph(canvasRef, x => Math.sin(x) + 15, new GraphProperties(color = Color.MAGENTA))
+  controller.newGraph(canvasRef, x => 20/(x-30), new GraphProperties(color = Color.black))
+
 }
 
