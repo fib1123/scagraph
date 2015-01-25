@@ -51,12 +51,15 @@ object Main extends App {
 //  controller.newGraph(canvasRef, x => Math.sin(x) + 10, new GraphProperties(color = Color.green))
 //  controller.newGraph(canvasRef, x => Math.sin(x) + 15, new GraphProperties(color = Color.MAGENTA))
 //  controller.newGraph(canvasRef, x => 20/(x-30), new GraphProperties(color = Color.black))
-
+//
   val eval = new Evaluator
-  controller.newGraph(canvasRef, eval.getFunction("Math.sin(x) - 15"), new GraphProperties(color = Color.green))
-  controller.newGraph(canvasRef, eval.getFunction("20/(x-30)"), new GraphProperties(color = Color.black))
-  controller.newGraph(canvasRef,  eval.getFunction("Math.sin(x) + 10"), new GraphProperties(color = Color.green))
-  controller.newGraph(canvasRef,  eval.getFunction("Math.sin(x) + 15"), new GraphProperties(color = Color.MAGENTA))
+//  controller.newGraph(canvasRef, eval.getFunction("Math.sin(x) - 15"), new GraphProperties(color = Color.green))
+//  controller.newGraph(canvasRef, eval.getFunction("20/(x-30)"), new GraphProperties(color = Color.black))
+//  controller.newGraph(canvasRef,  eval.getFunction("Math.sin(x) + 10"), new GraphProperties(color = Color.green))
+//  controller.newGraph(canvasRef,  eval.getFunction("Math.sin(x) + 15"), new GraphProperties(color = Color.MAGENTA))
+
+  val ui = new GraphAdderWindow(controller, eval, canvasRef)
+  ui.visible = true
   
 }
 
