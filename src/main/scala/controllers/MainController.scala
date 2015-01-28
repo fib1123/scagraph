@@ -30,5 +30,6 @@ class MainController (guiCanvas: GUICanvas){
 
     val graphProps = Graph.props(func)
     canvasRef ! (graphProps, graphProperties, initialPoint)
+    println("Adding " + func)
   }
 }
